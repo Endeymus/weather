@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 
 public class Weather {
 //    private int id;
-    private final static String APIKEY = "d9ed7ab531dcaa535085c39bb498d0b4";
+    private final static String APIKEY = "";
     private final static String imgFormat = ".jpg";
     private final static String womenFolder = "images/";
     private final static double K = 273.15;
