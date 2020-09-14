@@ -1,25 +1,32 @@
-package com.endeymus.weather.models;
+package com.endeymus.weather.models.utils;
 
+//import com.sun.istack.NotNull;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.GregorianCalendar;
 
 public class Weather {
 //    private int id;
-    private final String imgFormat = ".jpg";
-    private final String womenFolder = "images/";
+    private final static String APIKEY = "d9ed7ab531dcaa535085c39bb498d0b4";
+    private final static String imgFormat = ".jpg";
+    private final static String womenFolder = "images/";
+    private final static double K = 273.15;
+
     private String cityName;
-    private String temperature;
+    private double temperature;
     private String pathToImg;
+    private long minutes;
 
     public Weather() {
     }
 
-    private void setTemperature(String temperature) {
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
 
@@ -31,32 +38,50 @@ public class Weather {
         this.cityName = cityName;
     }
 
-    public void getWeather() {
-        String url = "https://yandex.ru/search/?text=погода%20в%20" + this.cityName + "&lr=213&clid=1882628";
-        String classId = "weather-forecast__current-temp";
-        Document doc = null;
+    /**
+     * Отправляем запрос на api и получаем ответ
+     * @param city
+     * @return тело запроса
+     */
+    private String getUrlContent(String city) {
+        String json = "";
+        String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city +  "&appid=" + APIKEY;
         try {
-            doc = Jsoup.connect(url).get();
-            for (Element element : doc.getAllElements()) {
-                System.out.println(element.text());
-            }
+            json = Jsoup.connect(url).ignoreContentType(true).execute().body();
         } catch (IOException e) {
             e.printStackTrace();
+//            System.out.println("Неверный город");
         }
-        if (doc != null) {
-            String textTemp = doc.getElementsByClass(classId).text();
-            setTemperature(textTemp);
-        }
+        return json;
     }
 
 
+    public void getWeather() {
+        minutes = Time.getCurrMinutes();
+
+        String body = getUrlContent(this.cityName);
+
+        if(!body.isEmpty()){
+            JSONObject json = new JSONObject(body);
+            setTemperature(json.getJSONObject("main").getDouble("temp") - K);
+        }
+    }
+
+    /**
+     * возвращает путь до картинки
+     * @return String
+     */
     public String getPathToImg() {
-        findPathToImages(findClothes(getValueOfTemp(getTemperature())));
-        System.out.println(pathToImg);
+        findPathToImages(findClothes(getIntOfTemp()));
+//        System.out.println(pathToImg);
         return this.pathToImg;
     }
 
-    private void findPathToImages(Temperature temperature) {
+    /**
+     * устанавливает путь для указанной температуры
+     * @param temperature
+     */
+    private void findPathToImages( Temperature temperature) {
         String folder = womenFolder;
         switch (temperature) {
             case HOT:
@@ -82,6 +107,11 @@ public class Weather {
         }
     }
 
+    /**
+     * возвращает enum Temperature для указанной температуры
+     * @param temperature
+     * @return enum Temperature
+     */
     private Temperature findClothes (int temperature){
         if (temperature > Temperature.HOT.getMinTemperature()) {                //30
             return Temperature.HOT;
@@ -96,15 +126,15 @@ public class Weather {
         } else return Temperature.FROST;                                        //-30
     }
 
-    private int getValueOfTemp(String temperature) {
-        System.out.println(temperature);
-        Matcher matcher = Pattern.compile("\\d+").matcher(temperature);
-        if (matcher.find()) {
-            return Integer.parseInt(temperature.substring(matcher.start(), matcher.end()));
-        }
-        return 0;
+    /**
+     * возвращает int значение параметра температуры
+     * @return int
+     */
+    private int getIntOfTemp() {
+        return (int) this.temperature;
     }
-    public String getTemperature() {
+
+    public double getTemperature() {
         return this.temperature;
     }
 }

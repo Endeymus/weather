@@ -1,4 +1,4 @@
-package com.endeymus.weather.models;
+package com.endeymus.weather.models.utils;
 
 public enum Temperature {
     FROST   (-30),
