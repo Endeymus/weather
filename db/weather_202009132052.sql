@@ -33,9 +33,9 @@ COLLATE utf8_general_ci;
 USE weather;
 
 --
--- Создать таблицу `weathertable`
+-- Создать таблицу `citytb`
 --
-CREATE TABLE IF NOT EXISTS weathertable (
+CREATE TABLE IF NOT EXISTS citytb (
   city varchar(255) NOT NULL DEFAULT '',
   temperature double DEFAULT NULL,
   minutes int(11) DEFAULT NULL,

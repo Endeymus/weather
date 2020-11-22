@@ -12,7 +12,7 @@ public enum Temperature {
         return this.minTemperature;
     }
     private final int minTemperature;
-    private Temperature(int minTemperature) {
+    Temperature(int minTemperature) {
         this.minTemperature = minTemperature;
     }
 }

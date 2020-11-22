@@ -3,13 +3,18 @@ package com.endeymus.weather.models.utils;
 //import com.sun.istack.NotNull;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.GregorianCalendar;
 
+@Component
 public class Weather {
 //    private int id;
-    private final static String APIKEY = "";
+    @Value("${spring.api}")
+    private String APIKEY;
+
     private final static String imgFormat = ".jpg";
     private final static String womenFolder = "images/";
     private final static double K = 273.15;
@@ -26,6 +31,10 @@ public class Weather {
         return cityName;
     }
 
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
     public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
@@ -34,9 +43,6 @@ public class Weather {
         this.pathToImg = pathToImg;
     }
 
-    public Weather(String cityName) {
-        this.cityName = cityName;
-    }
 
     /**
      * Отправляем запрос на api и получаем ответ
@@ -46,6 +52,7 @@ public class Weather {
     private String getUrlContent(String city) {
         String json = "";
         String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city +  "&appid=" + APIKEY;
+//        System.out.println(url);
         try {
             json = Jsoup.connect(url).ignoreContentType(true).execute().body();
         } catch (IOException e) {
@@ -63,7 +70,9 @@ public class Weather {
 
         if(!body.isEmpty()){
             JSONObject json = new JSONObject(body);
-            setTemperature(json.getJSONObject("main").getDouble("temp") - K);
+            double temp = json.getJSONObject("main").getDouble("temp");
+//            System.out.println(temp - 273.15);
+            setTemperature(temp - 273.15);
         }
     }
 

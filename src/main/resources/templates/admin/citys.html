@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:insert="admin/blocks/header :: header_admin"></div>
+
+
+<table>
+    <thead>
+    <tr>
+        <th><span>Имя города</span></th>
+        <th><span>Температура текущая</span></th>
+        <th><span>Время обращения</span></th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr th:each="city : ${citys}">
+        <th><span th:text="${city.getName()}"></span></th>
+        <th><span th:text="${city.getTemperature()}"></span></th>
+        <th><span th:text="${city.getMinutes()}"></span></th>
+    </tr>
+    </tbody>
+</table>
+
+
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+</html>

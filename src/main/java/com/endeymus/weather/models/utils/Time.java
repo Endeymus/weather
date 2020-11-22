@@ -1,5 +1,7 @@
 package com.endeymus.weather.models.utils;
 
+import org.springframework.stereotype.Component;
+
 import java.util.GregorianCalendar;
 
 public class Time {

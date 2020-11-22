@@ -11,7 +11,7 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"/>
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="hibernate.connection.pool_size">1</property>
+        <property name="hibernate.connection.pool_size">2</property>
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
         <!-- SQL dialect -->
@@ -20,8 +20,11 @@
         <property name="hibernate.connection.CharSet">utf8</property>
         <property name="hibernate.connection.characterEncoding">utf8</property>
         <property name="hibernate.connection.useUnicode">true</property>
+        <property name="hibernate.c3p0.timeout">300</property>
 
-        <mapping class="com.endeymus.weather.models.CityTB" />
+
+
+<!--        <mapping class="com.endeymus.weather.entities.CityTB" />-->
 
     </session-factory>
 </hibernate-configuration>
