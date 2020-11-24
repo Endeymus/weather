@@ -1,28 +1,28 @@
 package com.endeymus.weather.models.utils;
 
-//import com.sun.istack.NotNull;
+import com.endeymus.weather.repositories.CityTBRepository;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.GregorianCalendar;
 
 @Component
 public class Weather {
-//    private int id;
-    @Value("${spring.api}")
-    private String APIKEY;
-
     private final static String imgFormat = ".jpg";
     private final static String womenFolder = "images/";
-    private final static double K = 273.15;
+
+    private CityTBRepository cityTBRepository;
+
+    @Autowired
+    public void setCityTBRepository(CityTBRepository cityTBRepository) {
+        this.cityTBRepository = cityTBRepository;
+    }
 
     private String cityName;
-    private double temperature;
+    private int temperature;
     private String pathToImg;
-    private long minutes;
 
     public Weather() {
     }
@@ -35,7 +35,7 @@ public class Weather {
         this.cityName = cityName;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
 
@@ -46,33 +46,28 @@ public class Weather {
 
     /**
      * Отправляем запрос на api и получаем ответ
-     * @param city
      * @return тело запроса
      */
-    private String getUrlContent(String city) {
+    private String getUrlContent() {
         String json = "";
-        String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city +  "&appid=" + APIKEY;
-//        System.out.println(url);
+        String url = String.format("https://demo.thingsboard.io/api/v1/%s/attributes?clientKeys=temperature",
+                cityTBRepository.findByName(cityName).getDeviceID());
         try {
             json = Jsoup.connect(url).ignoreContentType(true).execute().body();
         } catch (IOException e) {
             e.printStackTrace();
-//            System.out.println("Неверный город");
         }
         return json;
     }
 
 
     public void getWeather() {
-        minutes = Time.getCurrMinutes();
-
-        String body = getUrlContent(this.cityName);
+        String body = getUrlContent();
 
         if(!body.isEmpty()){
             JSONObject json = new JSONObject(body);
-            double temp = json.getJSONObject("main").getDouble("temp");
-//            System.out.println(temp - 273.15);
-            setTemperature(temp - 273.15);
+            int temp = json.getJSONObject("client").getInt("temperature");
+            setTemperature(temp);
         }
     }
 
@@ -81,8 +76,7 @@ public class Weather {
      * @return String
      */
     public String getPathToImg() {
-        findPathToImages(findClothes(getIntOfTemp()));
-//        System.out.println(pathToImg);
+        findPathToImages(findClothes(getTemperature()));
         return this.pathToImg;
     }
 
@@ -135,15 +129,8 @@ public class Weather {
         } else return Temperature.FROST;                                        //-30
     }
 
-    /**
-     * возвращает int значение параметра температуры
-     * @return int
-     */
-    private int getIntOfTemp() {
-        return (int) this.temperature;
-    }
 
-    public double getTemperature() {
+    public int getTemperature() {
         return this.temperature;
     }
 }

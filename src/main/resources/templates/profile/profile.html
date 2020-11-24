@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:insert="blocks/header :: header"></div>
+<div class="container mt-5 mb-5">
+    <form th:method="GET" th:action="@{/profile/{id}/edit(id = ${user.getId()})}" name="user" th:object="${user}">
+        <label>Username</label>
+        <input type="text" readonly name="username" th:field="*{username}">
+        <br>
+        <label>email</label>
+        <input readonly type="text" name="email"  th:field="*{email}">
+        <br>
+        <label>City</label>
+        <input readonly type="text" name="city" th:field="*{city_name}">
+        <br>
+        <label>City object</label>
+        <input readonly type="text" name="city" th:field="*{cityTB}">
+        <br>
+        <button type="submit">Редактировать профиль</button>
+    </form>
+</div>
+<div th:insert="blocks/footer :: footer"></div>
+</body>
+</html>

@@ -15,10 +15,7 @@ public class CityTB implements Serializable {
     @Column(name = "city")
     private String name;
 
-    private double temperature;
-
-    private long minutes;
-
+    private String deviceID;
 
 
 }
