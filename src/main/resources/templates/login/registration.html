@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Страница регистрации</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" media="all" href="../../static/css/registration.css" th:href="@{/css/registration.css}">
+</head>
+<body>
+	<div class="registration">
+	<form th:method="POST" th:action="@{/registration}" th:object="${user}">
+  <div class="container_reg">
+    <h1>Регистрация</h1>
+    <p>Пожалуйста, заполните форму регистрации, чтобы создать учетную запись</p>
+    <hr>
+
+ 	<label for="username"><b>Username</b></label>
+    <input type="text" placeholder="Введите имя пользователя" id="username" name="username" th:field="*{username}" required>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Введите Email" id="email" name="email" th:field="*{email}" required>
+
+    <label for="password"><b>Пароль</b></label>
+    <input type="password" placeholder="Введите Password" id="password" name="password" th:field="*{password}" required>
+
+<!--    <label ><b>Повторите пароль</b></label>-->
+<!--    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>-->
+
+
+	  <select name="city" id="city" th:field="*{city_name}">
+		  <option disabled selected th:value = "*{city_name}" th:text="*{city_name}"/>
+		  <option th:each="city : ${citys}" th:value="${city.getName()}"
+				  th:text="${city.getName()}">
+		  </option>
+	  </select>
+
+
+	<select name="gender" id="gender" th:field="*{gender}">
+		<option selected value="male">Мужской</option>
+		<option value="female">Женский</option>
+	</select>
+   
+    <hr>
+
+   
+    <button type="submit" class="registerbtn">Зарегистрироваться</button>
+  </div>
+
+  <div class="container_reg signin">
+    <p>У вас уже есть аккаунт? <a th:href="@{/}">Войти</a>.</p>
+  </div>
+</form>	
+</div>	
+</body>
+</html>

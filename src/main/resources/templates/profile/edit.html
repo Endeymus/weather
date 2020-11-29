@@ -3,28 +3,37 @@
 <head>
     <title th:text="${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" media="all" href="../../static/css/registration.css" th:href="@{/css/registration.css}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div th:insert="blocks/header :: header"></div>
-<div class="container mt-5 mb-5">
+<div class="registration">
+<div class="container_reg mt-5 mb-5">
     <form th:method="POST" th:action="@{/profile/{id}/update(id = ${user.getId()})}" name="user" th:object="${user}">
-        <label>Username</label>
-        <input type="text" readonly name="username" th:field="*{username}">
-        <br>
-        <label>email</label>
-        <input type="text" name="email" th:field="*{email}">
-        <br>
-        <label>City</label>
-        <select name="city" th:field="*{city_name}">
+        <label for="username">Имя пользователя</label>
+        <input type="text" readonly name="username" id="username" th:field="*{username}">
+        <label for="email">Почтовый адрес</label>
+        <input type="text" name="email" id="email" th:field="*{email}">
+        <label for="city">Город</label>
+        <select name="city" id="city" th:field="*{city_name}">
             <option disabled selected th:value = "*{city_name}" th:text="*{city_name}"/>
             <option th:each="city : ${citys}" th:value="${city.getName()}"
                     th:text="${city.getName()}">
             </option>
         </select>
         <br>
-        <button type="submit">Сохранить</button>
+        <label for="gender">Пол</label>
+        <select name="city" id="gender" th:field="*{gender}">
+            <option disabled selected th:value = "*{gender}" th:text="*{gender}"/>
+            <option selected value="male">Мужской</option>
+            <option value="female">Женский</option>
+        </select>
+        <div class="container_reg signin">
+            <button class="signin" type="submit">Сохранить</button>
+        </div>
     </form>
+</div>
 </div>
 <div th:insert="blocks/footer :: footer"></div>
 </body>

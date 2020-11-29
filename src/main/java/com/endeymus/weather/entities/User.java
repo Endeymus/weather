@@ -22,6 +22,8 @@ public class User {
     @Column(name = "city")
     private String city_name;
 
+    private String gender;
+
     @ManyToOne
     @JoinColumn(name = "city", insertable = false, updatable = false)
     private CityTB cityTB;

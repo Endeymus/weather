@@ -14,6 +14,13 @@
 	<name>weather</name>
 	<description>Demo project for Spring Boot</description>
 
+	<repositories>
+		<repository>
+			<id>Eclipse Paho Repo</id>
+			<url>1.2.1</url>
+		</repository>
+	</repositories>
+
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -82,7 +89,11 @@
 			<version>1.18.12</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.eclipse.paho</groupId>
+			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+			<version>1.2.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
